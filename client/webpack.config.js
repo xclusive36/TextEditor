@@ -1,20 +1,20 @@
-const HtmlWebpackPlugin = require('html-webpack-plugin');
-const WebpackPwaManifest = require('webpack-pwa-manifest');
-const path = require('path');
-const { InjectManifest } = require('workbox-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin'); // Require  html-webpack-plugin plugin
+const WebpackPwaManifest = require('webpack-pwa-manifest'); // Require webpack-pwa-manifest plugin
+const path = require('path'); // Require path plugin
+const { InjectManifest } = require('workbox-webpack-plugin'); // Require workbox-webpack-plugin plugin
 
-module.exports = () => {
+module.exports = () => { // Export module as a function
   return {
-    mode: 'development',
-    entry: {
-      main: './src/js/index.js',
-      install: './src/js/install.js'
+    mode: 'development', // Set mode to development
+    entry: { // Set entry points
+      main: './src/js/index.js', // Main entry point
+      install: './src/js/install.js' // Install entry point
     },
-    output: {
-      filename: '[name].bundle.js',
-      path: path.resolve(__dirname, 'dist'),
+    output: { // Set output
+      filename: '[name].bundle.js', // Set filename
+      path: path.resolve(__dirname, 'dist'), // Set path
     },
-    plugins: [
+    plugins: [ // Set plugins
       // Webpack plugin that generates our html file and injects our bundles.
       new HtmlWebpackPlugin({
         template: "./index.html",
@@ -47,24 +47,23 @@ module.exports = () => {
         ],
       }),
     ],
-
-    module: {
-      rules: [
+    module: { // Set modules
+      rules: [ // Set rules
         {
-          test: /\.css$/,
-          use: ["style-loader", "css-loader"],
+          test: /\.css$/, // Target css files
+          use: ["style-loader", "css-loader"], // Use these loaders
         },
         {
-          test: /\.m?js$/,
-          exclude: /node_modules/,
-          // We use babel-loader in order to use ES6.
-          use: {
-            loader: "babel-loader",
-            options: {
-              presets: ["@babel/preset-env"],
-              plugins: [
-                "@babel/plugin-proposal-object-rest-spread",
-                "@babel/transform-runtime",
+          test: /\.m?js$/, // Target js files
+          exclude: /node_modules/, // Exclude node_modules
+          // We use babel-loader in order to use ES6. We also use @babel/preset-env to target specific browsers.
+          use: { // Use babel-loader
+            loader: "babel-loader", // Use babel-loader
+            options: { // Set options
+              presets: ["@babel/preset-env"], // Set presets
+              plugins: [ // Set plugins
+                "@babel/plugin-proposal-object-rest-spread", // Set plugin
+                "@babel/transform-runtime", // Set plugin
               ],
             },
           },

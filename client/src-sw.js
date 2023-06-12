@@ -1,31 +1,31 @@
-const { offlineFallback, warmStrategyCache } = require('workbox-recipes');
-const { CacheFirst, StaleWhileRevalidate } = require('workbox-strategies');
-const { registerRoute } = require('workbox-routing');
-const { CacheableResponsePlugin } = require('workbox-cacheable-response');
-const { ExpirationPlugin } = require('workbox-expiration');
-const { precacheAndRoute } = require('workbox-precaching/precacheAndRoute');
+const { offlineFallback, warmStrategyCache } = require('workbox-recipes'); // import workbox recipes for offline fallback and warm strategy cache
+const { CacheFirst, StaleWhileRevalidate } = require('workbox-strategies'); // import workbox strategies for cache first and stale while revalidate
+const { registerRoute } = require('workbox-routing'); // import workbox routing
+const { CacheableResponsePlugin } = require('workbox-cacheable-response'); // import workbox cacheable response plugin
+const { ExpirationPlugin } = require('workbox-expiration'); // import workbox expiration plugin
+const { precacheAndRoute } = require('workbox-precaching/precacheAndRoute'); // import workbox precache and route
 
-precacheAndRoute(self.__WB_MANIFEST);
+precacheAndRoute(self.__WB_MANIFEST); // precache and route workbox manifest
 
-const pageCache = new CacheFirst({
-  cacheName: 'page-cache',
-  plugins: [
-    new CacheableResponsePlugin({
-      statuses: [0, 200],
+const pageCache = new CacheFirst({ // create new cache first strategy
+  cacheName: 'page-cache', // name of cache storage
+  plugins: [ // array of plugins
+    new CacheableResponsePlugin({ // cacheable response plugin
+      statuses: [0, 200], // cache responses with these statuses
     }),
-    new ExpirationPlugin({
-      maxAgeSeconds: 30 * 24 * 60 * 60,
+    new ExpirationPlugin({ // expiration plugin
+      maxAgeSeconds: 30 * 24 * 60 * 60, // 30 Days
     }),
   ],
 });
 
-warmStrategyCache({
-  urls: ['/index.html', '/'],
-  strategy: pageCache,
+warmStrategyCache({ // warm strategy cache
+  urls: ['/index.html', '/'], // array of urls to warm cache
+  strategy: pageCache, // strategy to use
 });
 
-offlineFallback({
-  pageFallback: '/index.html',
+offlineFallback({ // offline fallback
+  pageFallback: '/index.html', // page fallback url
 });
 
 // Set up asset cache
@@ -47,5 +47,3 @@ registerRoute(
     ],
   })
 );
-
-// registerRoute();
